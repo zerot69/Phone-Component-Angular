@@ -1,0 +1,112 @@
+<div class="relative z-0 w-full group">
+  <label
+    for="phone"
+    [ngClass]="{
+      'text-gray-200': isDisabled,
+      'text-gray-400 group-focus-within:text-gray-500':
+        !phoneError || !temporaryCheck,
+      'text-red-500 group-focus-within:text-red-500':
+        phoneError && temporaryCheck && !isDisabled
+    }"
+    class="mb-2 text-xs z-10 font-medium rounded-sm bg-white relative px-2 top-2.5 left-3 w-auto group-focus-within:bg-gray-100 transition-all duration-300 ease-in-out"
+  >
+    {{ label }}
+    <span
+      [ngClass]="{ 'text-red-500': !isDisabled, 'text-red-200': isDisabled }"
+      >*</span
+    >
+  </label>
+  <div
+    class="flex items-center border rounded-md px-5 py-4 relative"
+    [ngClass]="{
+      'border-red-500': phoneError,
+      'border-gray-400': !phoneError,
+      'border-2': phoneError && temporaryCheck,
+      'border-gray-200': isDisabled
+    }"
+    #inputContainer
+  >
+    <div class="relative mr-2">
+      <button
+        (click)="toggleDropdown()"
+        class="flex items-center focus:outline-none"
+        [disabled]="isDisabled"
+        [ngClass]="{
+          'text-gray-200': isDisabled,
+          'text-black': !isDisabled
+        }"
+      >
+        <span class="mr-2">{{ selectedCountry.flag }}</span>
+        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M5.293 7.707a1 1 0 011.414 0L10 11.414l3.293-3.707a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+      <div
+        *ngIf="dropdownOpen"
+        [ngStyle]="{ 'width.px': inputContainerWidth }"
+        class="absolute -left-5 mt-4 bg-white border border-gray-300 rounded-md shadow-lg z-5 overflow-y-scroll max-h-72"
+        #dropdownMenu
+      >
+        <ul>
+          <div class="text-xs font-medium text-gray-400 ml-4 mt-3 mb-1">
+            Based on your location
+          </div>
+          <li
+            (click)="selectCountry(defaultCountry)"
+            class="flex items-center p-2 cursor-pointer hover:bg-gray-100 gap-4"
+          >
+            <span class="ml-3">{{ defaultCountry.flag }}</span>
+            {{ defaultCountry.name }}
+            <span class="flex-grow text-right mr-3">{{
+              defaultCountry.code
+            }}</span>
+          </li>
+          <hr class="border-gray-300 my-1" />
+          <li
+            *ngFor="let country of countries"
+            (click)="selectCountry(country)"
+            class="flex items-center p-2 cursor-pointer hover:bg-gray-100 gap-4 h-12"
+          >
+            <span class="ml-3">{{ country.flag }}</span> {{ country.name }}
+            <span class="flex-grow text-right mr-3">{{ country.code }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <input
+      type="tel"
+      id="phone"
+      class="w-full focus:outline-none"
+      [placeholder]="placeholder"
+      [(ngModel)]="displayPhoneNumber"
+      (ngModelChange)="onPhoneInputChange($event)"
+      (blur)="onPhoneInputBlur()"
+      [disabled]="isDisabled"
+      required
+      [ngClass]="{
+        'text-gray-200 bg-white': isDisabled,
+        'text-black': !isDisabled
+      }"
+    />
+  </div>
+  <div
+    *ngIf="phoneError && temporaryCheck"
+    class="text-red-500 text-xs mt-2 ml-5"
+  >
+    {{ phoneError }}
+  </div>
+</div>
+<button
+  (click)="togglePhoneInput()"
+  class="mt-6 text-white px-4 py-2 rounded-md focus:outline-none"
+  [ngClass]="{
+    'bg-gray-500': !isDisabled,
+    'bg-blue-500': isDisabled
+  }"
+>
+  {{ isDisabled ? "Enable" : "Disable" }}
+</button>
