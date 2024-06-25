@@ -1,4 +1,4 @@
-<div class="relative z-0 w-full group">
+<div class="relative z-0 w-full group flex-1">
   <label
     for="phone"
     [ngClass]="{
@@ -100,13 +100,15 @@
     {{ phoneError }}
   </div>
 </div>
-<button
-  (click)="togglePhoneInput()"
-  class="mt-6 text-white px-4 py-2 rounded-md focus:outline-none"
-  [ngClass]="{
-    'bg-gray-500': !isDisabled,
-    'bg-blue-500': isDisabled
-  }"
->
-  {{ isDisabled ? "Enable" : "Disable" }}
-</button>
+<div class="flex justify-center mt-6">
+  <button
+    (click)="togglePhoneInput()"
+    class="text-white px-4 py-2 rounded-md focus:outline-none"
+    [ngClass]="{
+      'bg-gray-500': !isDisabled,
+      'bg-blue-500': isDisabled
+    }"
+  >
+    {{ isDisabled ? "Enable" : "Disable" }}
+  </button>
+</div>
