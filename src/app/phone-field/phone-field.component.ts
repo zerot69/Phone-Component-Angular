@@ -57,9 +57,11 @@ export class PhoneFieldComponent implements OnInit, AfterViewInit {
   }
 
   selectCountry(country: any) {
+    const previousCountryCode = this.selectedCountry.code;
     this.selectedCountry = country;
-    this.phoneNumber = country.code;
-    this.displayPhoneNumber = this.formatPhoneNumber(country.code);
+    this.phoneNumber =
+      country.code + this.phoneNumber.slice(previousCountryCode.length);
+    this.displayPhoneNumber = this.formatPhoneNumber(this.phoneNumber);
     this.dropdownOpen = false;
   }
 
@@ -86,9 +88,13 @@ export class PhoneFieldComponent implements OnInit, AfterViewInit {
   }
 
   formatPhoneNumber(phoneNumber: string): string {
-    const countryCode = phoneNumber.slice(0, 3);
-    const areaCode = phoneNumber.slice(3, 6);
-    const subscriberNumber = phoneNumber.slice(6);
+    const countryCodeLength = this.selectedCountry.code.length;
+    const countryCode = phoneNumber.slice(0, countryCodeLength);
+    const areaCode = phoneNumber.slice(
+      countryCodeLength,
+      countryCodeLength + 3
+    );
+    const subscriberNumber = phoneNumber.slice(countryCodeLength + 3);
 
     return `${countryCode} ${areaCode} ${subscriberNumber}`.trim();
   }
@@ -99,15 +105,14 @@ export class PhoneFieldComponent implements OnInit, AfterViewInit {
 
   togglePhoneInput() {
     this.isDisabled = !this.isDisabled;
-    this.phoneNumber = this.selectedCountry.code; // Reset phone number when input is disabled
-    this.displayPhoneNumber = this.formatPhoneNumber(this.selectedCountry.code); // Reset display phone number when input is disabled
-    this.phoneError = ''; // Clear error message when input is disabled
+    this.phoneNumber = this.selectedCountry.code; // Reset phone number
+    this.displayPhoneNumber = this.formatPhoneNumber(this.selectedCountry.code); // Reset display phone number
+    this.phoneError = ''; // Clear error message
   }
 
   private getUserCountryCode(): string {
     const timezones: { [key: string]: string } = {
       'America/New_York': '+1',
-      'America/Vancouver': '+1',
       'Asia/Tokyo': '+81',
       'Asia/Ho_Chi_Minh': '+84',
       'Asia/Shanghai': '+86',
