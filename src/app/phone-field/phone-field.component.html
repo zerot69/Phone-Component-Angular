@@ -87,6 +87,7 @@
       (blur)="onPhoneInputBlur()"
       [disabled]="isDisabled"
       required
+      autocomplete="off"
       [ngClass]="{
         'text-gray-200 bg-white': isDisabled,
         'text-black': !isDisabled
