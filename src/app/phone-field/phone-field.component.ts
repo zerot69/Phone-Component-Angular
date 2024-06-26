@@ -90,14 +90,12 @@ export class PhoneFieldComponent implements OnInit, AfterViewInit {
   formatPhoneNumber(phoneNumber: string): string {
     const countryCodeLength = this.selectedCountry.code.length;
     const countryCode = phoneNumber.slice(0, countryCodeLength);
-    const areaCode = phoneNumber.slice(
-      countryCodeLength,
-      countryCodeLength + 3
-    );
-    const subscriberNumber = phoneNumber.slice(countryCodeLength + 3);
+    const areaCode = phoneNumber.slice(countryCodeLength, countryCodeLength + 3);
+    const subscriberNumberPart1 = phoneNumber.slice(countryCodeLength + 3, countryCodeLength + 6);
+    const subscriberNumberPart2 = phoneNumber.slice(countryCodeLength + 6);
 
-    return `${countryCode} ${areaCode} ${subscriberNumber}`.trim();
-  }
+    return `${countryCode} (${areaCode}) ${subscriberNumberPart1} - ${subscriberNumberPart2}`.trim();
+}
 
   stripFormatting(phoneNumber: string): string {
     return phoneNumber.replace(/\s+/g, '');
